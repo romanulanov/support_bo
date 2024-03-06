@@ -1,8 +1,8 @@
 import json
 import os
+import requests
 
 from dotenv import load_dotenv
-import requests
 
 from google.api_core.exceptions import InvalidArgument
 from google.cloud import dialogflow
