@@ -34,26 +34,28 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
         except InvalidArgument:
             raise
 
-        return response.query_result.fulfillment_text
+        if response.query_result.intent.is_fallback:
+            return None, response.query_result.fulfillment_text
+        else:
+            return True, response.query_result.fulfillment_text
 
 
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Здравствуйте")
 
 
-def echo2(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text=detect_intent_texts(project_id, session_id, [update.message.text], language_code))
+def send_answer(update, context):
+    has_answer, bot_message = detect_intent_texts(project_id, session_id, [update.message.text], language_code)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=bot_message)
+
 
 def main():
     
     bot_token = os.environ['TG_BOT_TOKEN']
-   
     updater = Updater(token=bot_token, use_context=True)
-    
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
-   
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo2))
+    dp.add_handler(MessageHandler(Filters.text, send_answer))
 
     updater.start_polling()
 
