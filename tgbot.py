@@ -6,7 +6,6 @@ from time import sleep
 from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 from google.cloud import dialogflow
 from google.oauth2 import service_account
-from google.auth.transport.requests import Request
 from google.api_core.exceptions import InvalidArgument
 
 import os
