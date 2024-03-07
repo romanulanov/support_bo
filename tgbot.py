@@ -1,5 +1,5 @@
 import os
-import logging
+import requests
 import telegram
 
 from dotenv import load_dotenv
@@ -34,7 +34,7 @@ def main():
     try:
         updater.start_polling()
         updater.idle()
-    except Exception as err:
+    except requests.exceptions.HTTPError as err:
         bot.logger.warning(f'Телеграм бот упал с ошибкой {err}')
    
 

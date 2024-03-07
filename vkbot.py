@@ -1,9 +1,10 @@
 import os
-import logging
+import requests
 import telegram
 import random
 import vk_api as vk
 
+from time import sleep
 from vk_api.longpoll import VkLongPoll, VkEventType
 from dotenv import load_dotenv
 from df_API import detect_intent_texts
@@ -30,6 +31,9 @@ def main():
                         message=bot_message,
                         random_id=random.randint(1, 1000)
                     )
+    except requests.exceptions.ReadTimeout:
+        sleep(5)
+        
     except Exception as err:
         bot.logger.warning(f'Вк бот упал с ошибкой {err}')
 
