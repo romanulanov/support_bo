@@ -24,6 +24,8 @@ def main():
     try:
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+                if len(event.text) > 256:
+                    event.text = event.text[:256]
                 has_answer, bot_message = detect_intent_texts([event.text])
                 if has_answer:
                     vk_api.messages.send(
