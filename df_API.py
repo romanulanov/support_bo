@@ -78,8 +78,8 @@ def main():
     load_dotenv()
     project_id = os.environ['PROJECT_ID']
     response = requests.get("https://dvmn.org/media/filer_public/a7/db/a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json")
-    response.raise_for_status
-    topics = json.loads(response.text)
+    response.raise_for_status()
+    topics = response.json()
     for topic, phrase in topics.items():
         create_intent(project_id,
                       topic,
