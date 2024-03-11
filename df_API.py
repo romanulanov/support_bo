@@ -15,11 +15,9 @@ LANGUAGE_CODE = "ru"
 def create_intent(project_id,
                   display_name,
                   training_phrases_parts,
-                  message_texts):
-    credentials = service_account.Credentials.from_service_account_file(
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
-        scopes=['https://www.googleapis.com/auth/cloud-platform']
-        )
+                  message_texts,
+                  credentials):
+    
     intents_client = dialogflow.IntentsClient(credentials=credentials)
     parent = dialogflow.AgentsClient.agent_path(project_id)
     training_phrases = []
@@ -46,17 +44,12 @@ def create_intent(project_id,
     print('Intent created: {}'.format(response))
 
 
-def detect_intent_texts(text):
-    credentials = service_account.Credentials.from_service_account_file(
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
-        scopes=['https://www.googleapis.com/auth/cloud-platform']
-    )
+def detect_intent_texts(text, credentials, project_id, session_id):
     client = dialogflow.SessionsClient(credentials=credentials)
-    session = client.session_path(os.environ['PROJECT_ID'],
-                                  os.environ['SESSION_ID']
+    session = client.session_path(project_id,
+                                  session_id,
                                   )
 
-    
     text_input = dialogflow.TextInput(text=text,
                                       language_code=LANGUAGE_CODE)
     query_input = dialogflow.QueryInput(text=text_input)
@@ -73,6 +66,10 @@ def detect_intent_texts(text):
 
 def main():
     load_dotenv()
+    credentials = service_account.Credentials.from_service_account_file(
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
+        scopes=['https://www.googleapis.com/auth/cloud-platform']
+        )
     project_id = os.environ['PROJECT_ID']
     response = requests.get("https://dvmn.org/media/filer_public/a7/db/a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json")
     response.raise_for_status()
@@ -81,7 +78,8 @@ def main():
         create_intent(project_id,
                       topic,
                       phrase['questions'],
-                      [phrase['answer']])
+                      [phrase['answer']],
+                      credentials)
 
 
 if __name__ == "__main__":
