@@ -46,7 +46,7 @@ def create_intent(project_id,
     print('Intent created: {}'.format(response))
 
 
-def detect_intent_texts(texts):
+def detect_intent_texts(text):
     credentials = service_account.Credentials.from_service_account_file(
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
         scopes=['https://www.googleapis.com/auth/cloud-platform']
@@ -56,19 +56,19 @@ def detect_intent_texts(texts):
                                   os.environ['SESSION_ID']
                                   )
 
-    for text in texts:
-        text_input = dialogflow.TextInput(text=text,
-                                          language_code=LANGUAGE_CODE)
-        query_input = dialogflow.QueryInput(text=text_input)
+    
+    text_input = dialogflow.TextInput(text=text,
+                                      language_code=LANGUAGE_CODE)
+    query_input = dialogflow.QueryInput(text=text_input)
 
-        try:
-            response = client.detect_intent(
-                request={"session": session, "query_input": query_input}
-            )
-        except InvalidArgument:
-            raise
+    try:
+        response = client.detect_intent(
+            request={"session": session, "query_input": query_input}
+        )
+    except InvalidArgument:
+        raise
 
-        return response.query_result.intent.is_fallback, response.query_result.fulfillment_text
+    return not(response.query_result.intent.is_fallback), response.query_result.fulfillment_text
 
 
 def main():

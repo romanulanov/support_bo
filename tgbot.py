@@ -15,7 +15,7 @@ def start(update, context):
 
 
 def send_answer(update, context):
-    has_answer, bot_message = detect_intent_texts([update.message.text])
+    has_answer, bot_message = detect_intent_texts(update.message.text)
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text=bot_message)
 
