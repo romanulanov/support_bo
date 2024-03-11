@@ -1,7 +1,7 @@
-import json
+import argparse
 import os
 import requests
-
+import json
 from dotenv import load_dotenv
 
 
@@ -63,15 +63,22 @@ def detect_intent_texts(text, credentials, project_id, session_id):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--path', default='questions.json', help='''Введите путь до JSON,
+                        откуда будут браться данные для обучения.
+                        По умолчанию данные находятся в questions.json в корне проекта.''')
     load_dotenv()
     credentials = service_account.Credentials.from_service_account_file(
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
         scopes=['https://www.googleapis.com/auth/cloud-platform']
         )
+    args = parser.parse_args()
     project_id = os.environ['PROJECT_ID']
-    response = requests.get("https://dvmn.org/media/filer_public/a7/db/a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json")
-    response.raise_for_status()
-    topics = response.json()
+    
+    questions_path = args.path
+    with open(questions_path, "r", encoding="utf-8") as file:
+        topics = json.loads(file.read())
+    print(topics)
     for topic, phrase in topics.items():
         create_intent(project_id,
                       topic,

@@ -29,7 +29,8 @@ Python3 должен быть уже установлен. Затем испол
 
 2. Для запуска бота в ВК используйте команду `python vk_bot.py`
 
-3. Для обучения бота используйте команду `python df_API.py`. 
+3. Для обучения бота используйте команду `python df_API.py`. Введите путь до папки с JSON, откуда будут браться данные для обучения `python df_API.py C:\Users\User\Desktop\questions.json`. По умолчанию данные находятся в questions.json в корне проекта.
+
 [Пример](https://dvmn.org/media/filer_public/a7/db/a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json) JSON-файла с обучающими фразами.
 
 ## Пример использования бота
