@@ -4,7 +4,6 @@ import requests
 
 from dotenv import load_dotenv
 
-from google.api_core.exceptions import InvalidArgument
 from google.cloud import dialogflow
 from google.oauth2 import service_account
 
@@ -54,12 +53,10 @@ def detect_intent_texts(text, credentials, project_id, session_id):
                                       language_code=LANGUAGE_CODE)
     query_input = dialogflow.QueryInput(text=text_input)
 
-    try:
-        response = client.detect_intent(
-            request={"session": session, "query_input": query_input}
-        )
-    except InvalidArgument:
-        raise
+    
+    response = client.detect_intent(
+        request={"session": session, "query_input": query_input}
+    )
 
     return not(response.query_result.intent.is_fallback), response.query_result.fulfillment_text
 

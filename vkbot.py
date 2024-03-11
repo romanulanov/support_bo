@@ -1,5 +1,4 @@
 import os
-import requests
 import telegram
 import random
 import vk_api as vk
