@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from df_API import detect_intent_texts
 from tg_logger import TelegramLogsHandler
 from google.oauth2 import service_account
-
+from google.api_core.exceptions import InvalidArgument
 
 def main():
     load_dotenv()
@@ -40,8 +40,11 @@ def main():
                         message=bot_message,
                         random_id=random.randint(1, 1000)
                     )   
+    except InvalidArgument:
+        raise
     except Exception as err:
         bot.logger.warning(f'Вк бот упал с ошибкой {err}')
+
 
 
 if __name__ == "__main__":

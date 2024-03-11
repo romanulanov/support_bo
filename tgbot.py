@@ -8,6 +8,7 @@ from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 from df_API import detect_intent_texts
 from tg_logger import TelegramLogsHandler
 from google.oauth2 import service_account
+from google.api_core.exceptions import InvalidArgument
 
 
 def start(update, context):
@@ -49,7 +50,8 @@ def main():
         updater.idle()
     except requests.exceptions.HTTPError as err:
         bot.logger.warning(f'Телеграм бот упал с ошибкой {err}')
-   
+    except InvalidArgument:
+        raise
 
 if __name__ == '__main__':
     main()
