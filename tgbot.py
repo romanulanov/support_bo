@@ -17,7 +17,10 @@ def start(update, context):
 
 
 def send_answer(update, context, credentials, project_id):
-    has_answer, bot_message = detect_intent_texts(update.message.text, credentials, project_id, update.effective_chat.id)
+    has_answer, bot_message = detect_intent_texts(update.message.text,
+                                                  credentials,
+                                                  project_id,
+                                                  update.effective_chat.id)
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text=bot_message)
 
@@ -31,15 +34,19 @@ def main():
         scopes=['https://www.googleapis.com/auth/cloud-platform']
     )
     bot = telegram.Bot(token=bot_token)
-    bot.logger.addHandler(TelegramLogsHandler(bot, os.environ['TELEGRAM_CHAT_ID']))
+    bot.logger.addHandler(TelegramLogsHandler(bot,
+                                              os.environ['TELEGRAM_CHAT_ID']
+                                              )
+                          )
     bot.logger.warning('Телеграм бот запущен')
     updater = Updater(token=bot_token, use_context=True)
-    send_answer_with_credentials = lambda update, context: send_answer(update,
-                                                                       context,
-                                                                       credentials,
-                                                                       project_id,
-                                                                       )
-    
+    send_answer_with_credentials = lambda update, context: send_answer(
+        update,
+        context,
+        credentials,
+        project_id,
+        )
+
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(MessageHandler(Filters.text, send_answer_with_credentials))
@@ -51,6 +58,7 @@ def main():
         bot.logger.warning(f'Телеграм бот упал с ошибкой {err}')
     except InvalidArgument:
         raise
+
 
 if __name__ == '__main__':
     main()
