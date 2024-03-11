@@ -24,18 +24,13 @@ def main():
     try:
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                if len(event.text) > 256:
-                    event.text = event.text[:256]
                 has_answer, bot_message = detect_intent_texts([event.text])
                 if has_answer:
                     vk_api.messages.send(
                         user_id=event.user_id,
                         message=bot_message,
                         random_id=random.randint(1, 1000)
-                    )
-    except requests.exceptions.ReadTimeout:
-        sleep(5)
-        
+                    )   
     except Exception as err:
         bot.logger.warning(f'Вк бот упал с ошибкой {err}')
 
