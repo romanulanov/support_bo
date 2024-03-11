@@ -12,7 +12,7 @@
 Python3 должен быть уже установлен. Затем используйте `pip` (или `pip3`, есть конфликт с Python2) для установки зависимостей.
 `pip install -r requirements.txt`
 
-Параметры `TELEGRAM_BOT_TOKEN`, `PROJECT_ID`, `SESSION_ID`, `GOOGLE_APPLICATION_CREDENTIALS`, `VK_API_TOKEN` и `TELEGRAM_CHAT_ID` должны находится в файле `.env` рядом со скриптом.
+Параметры `TELEGRAM_BOT_TOKEN`, `PROJECT_ID`, `GOOGLE_APPLICATION_CREDENTIALS`, `VK_API_TOKEN` и `TELEGRAM_CHAT_ID` должны находится в файле `.env` рядом со скриптом.
 
 Получить `TELEGRAM_BOT_TOKEN` можно в Telegram у @BotFather.
 

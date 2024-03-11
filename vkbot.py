@@ -15,7 +15,6 @@ def main():
     load_dotenv()
     bot_token = os.environ['TG_BOT_TOKEN']
     project_id = os.environ['PROJECT_ID']
-    session_id = os.environ['SESSION_ID']
     credentials = service_account.Credentials.from_service_account_file(
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
         scopes=['https://www.googleapis.com/auth/cloud-platform']
@@ -33,7 +32,7 @@ def main():
                 has_answer, bot_message = detect_intent_texts(event.text,
                                                               credentials,
                                                               project_id,
-                                                              session_id)
+                                                              f"vk-{event.user_id}")
                 if has_answer:
                     vk_api.messages.send(
                         user_id=event.user_id,

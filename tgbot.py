@@ -16,8 +16,8 @@ def start(update, context):
                              text="Здравствуйте")
 
 
-def send_answer(update, context, credentials, project_id, session_id):
-    has_answer, bot_message = detect_intent_texts(update.message.text, credentials, project_id, session_id)
+def send_answer(update, context, credentials, project_id):
+    has_answer, bot_message = detect_intent_texts(update.message.text, credentials, project_id, update.effective_chat.id)
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text=bot_message)
 
@@ -26,7 +26,6 @@ def main():
     load_dotenv()
     bot_token = os.environ['TG_BOT_TOKEN']
     project_id = os.environ['PROJECT_ID']
-    session_id = os.environ['SESSION_ID']
     credentials = service_account.Credentials.from_service_account_file(
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
         scopes=['https://www.googleapis.com/auth/cloud-platform']
@@ -39,7 +38,7 @@ def main():
                                                                        context,
                                                                        credentials,
                                                                        project_id,
-                                                                       session_id)
+                                                                       )
     
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
