@@ -12,40 +12,34 @@ from google.api_core.exceptions import InvalidArgument
 
 
 def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="Здравствуйте")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Здравствуйте")
 
 
 def send_answer(update, context, credentials, project_id):
-    has_answer, bot_message = detect_intent_texts(update.message.text,
-                                                  credentials,
-                                                  project_id,
-                                                  update.effective_chat.id)
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=bot_message)
+    has_answer, bot_message = detect_intent_texts(
+        update.message.text, credentials, project_id, update.effective_chat.id
+    )
+    context.bot.send_message(chat_id=update.effective_chat.id, text=bot_message)
 
 
 def main():
     load_dotenv()
-    bot_token = os.environ['TG_BOT_TOKEN']
-    project_id = os.environ['PROJECT_ID']
+    bot_token = os.environ["TG_BOT_TOKEN"]
+    project_id = os.environ["PROJECT_ID"]
     credentials = service_account.Credentials.from_service_account_file(
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'],
-        scopes=['https://www.googleapis.com/auth/cloud-platform']
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"],
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
     )
     bot = telegram.Bot(token=bot_token)
-    bot.logger.addHandler(TelegramLogsHandler(bot,
-                                              os.environ['TELEGRAM_CHAT_ID']
-                                              )
-                          )
-    bot.logger.warning('Телеграм бот запущен')
+    bot.logger.addHandler(TelegramLogsHandler(bot, os.environ["TELEGRAM_CHAT_ID"]))
+    bot.logger.warning("Телеграм бот запущен")
     updater = Updater(token=bot_token, use_context=True)
     send_answer_with_credentials = lambda update, context: send_answer(
         update,
         context,
         credentials,
         project_id,
-        )
+    )
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
@@ -55,10 +49,10 @@ def main():
         updater.start_polling()
         updater.idle()
     except requests.exceptions.HTTPError as err:
-        bot.logger.warning(f'Телеграм бот упал с ошибкой {err}')
+        bot.logger.warning(f"Телеграм бот упал с ошибкой {err}")
     except InvalidArgument:
         raise
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
